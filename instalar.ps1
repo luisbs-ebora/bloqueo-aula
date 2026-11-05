@@ -19,9 +19,16 @@ try {
   $ajustes = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 10) -MultipleInstances IgnoreNew
   Register-ScheduledTask -TaskName 'BloqueoAula' -Action $accion -Trigger $alEncender, $cada30 -Principal $quien -Settings $ajustes -Description 'Descarga y aplica el bloqueo de webs del aula (repo bloqueo-aula).' -Force | Out-Null
 
+  # Se aplica ya, con esta cuenta (que si tiene salida a Internet), y queda guardada la copia para la tarea.
+  $bat = Join-Path $dir 'BLOQUEAR-TODO.bat'
+  Invoke-WebRequest -Uri ($base + '/BLOQUEAR-TODO.bat?t=' + [DateTime]::UtcNow.Ticks) -OutFile $bat -UseBasicParsing -TimeoutSec 30
+  if (-not ([IO.File]::ReadAllText($bat)).Contains('rem FIRMA: BLOQUEO-AULA')) { throw 'Lo descargado no es el script de bloqueo' }
+  $p = Start-Process -FilePath 'cmd.exe' -ArgumentList ('/c "' + $bat + '" /s') -Wait -PassThru -WindowStyle Hidden
+  Add-Content -Path (Join-Path $dir 'registro.txt') -Value ('{0:yyyy-MM-dd HH:mm:ss}  Instalado y aplicado por el instalador. Codigo de salida: {1}' -f (Get-Date), $p.ExitCode)
+  if ($p.ExitCode -ne 0) { throw ('BLOQUEAR-TODO.bat ha terminado con errores (codigo ' + $p.ExitCode + ')') }
   Start-ScheduledTask -TaskName 'BloqueoAula'
   Write-Host ''
-  Write-Host ('INSTALADO en ' + $env:COMPUTERNAME + '. El bloqueo se esta aplicando ahora y se actualizara cada 30 minutos.') -ForegroundColor Green
+  Write-Host ('INSTALADO en ' + $env:COMPUTERNAME + '. Bloqueo aplicado. Se actualizara solo cada 30 minutos.') -ForegroundColor Green
 } catch {
   Write-Host ''
   Write-Host ('HA FALLADO en ' + $env:COMPUTERNAME + ': ' + $_.Exception.Message) -ForegroundColor Red

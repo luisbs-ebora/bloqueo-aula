@@ -172,8 +172,9 @@ reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "134" /t REG_SZ /
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "135" /t REG_SZ /d "snow-rider3d.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "136" /t REG_SZ /d "snow-rider.gitlab.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "137" /t REG_SZ /d "snow-rider-3d.gitlab.io" /f >nul || set ERR=1
-reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com/games/snowrider3d" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "139" /t REG_SZ /d "thesantatracker.com/reindeer-barn-snow-rider" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "140" /t REG_SZ /d "snowclassroom.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "121" /t REG_SZ /d "tsnowrider.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "122" /t REG_SZ /d "snowrider.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "123" /t REG_SZ /d "snowrider3d.io" /f >nul || set ERR=1
@@ -191,8 +192,9 @@ reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "134" /t RE
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "135" /t REG_SZ /d "snow-rider3d.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "136" /t REG_SZ /d "snow-rider.gitlab.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "137" /t REG_SZ /d "snow-rider-3d.gitlab.io" /f >nul || set ERR=1
-reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com/games/snowrider3d" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "139" /t REG_SZ /d "thesantatracker.com/reindeer-barn-snow-rider" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "140" /t REG_SZ /d "snowclassroom.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "101" /t REG_SZ /d "poki.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "102" /t REG_SZ /d "crazygames.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "103" /t REG_SZ /d "miniclip.com" /f >nul || set ERR=1
@@ -230,8 +232,9 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "134" /t REG_SZ 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "135" /t REG_SZ /d "snow-rider3d.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "136" /t REG_SZ /d "snow-rider.gitlab.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "137" /t REG_SZ /d "snow-rider-3d.gitlab.io" /f >nul || set ERR=1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com/games/snowrider3d" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "138" /t REG_SZ /d "hoodamath.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "139" /t REG_SZ /d "thesantatracker.com/reindeer-barn-snow-rider" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "140" /t REG_SZ /d "snowclassroom.github.io" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "AllowDinosaurEasterEgg" /t REG_DWORD /d 0 /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v "AllowDinosaurEasterEgg" /t REG_DWORD /d 0 /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v "BraveAIChatEnabled" /t REG_DWORD /d 0 /f >nul || set ERR=1
@@ -357,10 +360,11 @@ reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "265" /t
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "266" /t REG_SZ /d "*://snow-rider3d.github.io/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "267" /t REG_SZ /d "*://snow-rider.gitlab.io/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "268" /t REG_SZ /d "*://snow-rider-3d.gitlab.io/*" /f >nul || set ERR=1
-reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "269" /t REG_SZ /d "*://hoodamath.com/games/snowrider3d*" /f >nul || set ERR=1
-reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "270" /t REG_SZ /d "*://www.hoodamath.com/games/snowrider3d*" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "269" /t REG_SZ /d "*://hoodamath.com/*" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "270" /t REG_SZ /d "*://*.hoodamath.com/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "271" /t REG_SZ /d "*://thesantatracker.com/reindeer-barn-snow-rider*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "272" /t REG_SZ /d "*://www.thesantatracker.com/reindeer-barn-snow-rider*" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "273" /t REG_SZ /d "*://snowclassroom.github.io/*" /f >nul || set ERR=1
 echo Aplicando bloquear-descarga-navegadores ...
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "401" /t REG_SZ /d "opera.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "401" /t REG_SZ /d "opera.com" /f >nul || set ERR=1
