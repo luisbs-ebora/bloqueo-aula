@@ -1,0 +1,5 @@
+libre
+# Primera palabra: "clase" (solo la lista blanca de LISTA-BLANCA.bat) o "libre" (solo la lista negra).
+# Cambialo aqui en GitHub (lapiz > Commit). Los equipos lo aplican en 5 minutos como mucho;
+# para que sea al momento, desde Veyon > Iniciar aplicacion:  cmd /c schtasks /run /tn BloqueoAula
+# Al cambiar de modo se cierran los navegadores abiertos para que cojan el cambio.

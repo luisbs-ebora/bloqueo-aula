@@ -416,6 +416,18 @@ exit /b %ERR%
 rem ===== A partir de aqui no es cmd: es el codigo PowerShell del archivo hosts. cmd nunca llega (exit /b de arriba). =====
 #PS-INICIO
 $ErrorActionPreference = 'Stop'
+# Pone al dia actualizar.ps1 en los equipos con la tarea BloqueoAula (asi no hay que reinstalar equipo por equipo).
+try {
+  $act = Join-Path $env:ProgramData 'BloqueoAula\actualizar.ps1'
+  if (Test-Path $act) {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $tmpA = $act + '.tmp'
+    Invoke-WebRequest -Uri ('https://raw.githubusercontent.com/luisbs-ebora/bloqueo-aula/main/actualizar.ps1?t=' + [DateTime]::UtcNow.Ticks) -OutFile $tmpA -UseBasicParsing -TimeoutSec 30
+    if (([IO.File]::ReadAllText($tmpA)).Contains('# FIRMA: BLOQUEO-AULA-ACT')) {
+      if ((Get-FileHash $tmpA).Hash -ne (Get-FileHash $act).Hash) { Move-Item $tmpA $act -Force; Write-Host 'actualizar.ps1 puesto al dia' } else { Remove-Item $tmpA -Force }
+    } else { Remove-Item $tmpA -Force }
+  }
+} catch { Write-Host ('No se pudo poner al dia actualizar.ps1: ' + $_.Exception.Message) }
 try {
   # Las webs salen de la lista de Chrome de este mismo archivo: solo dominios, sin rutas (hosts no entiende rutas).
   $bat = [IO.File]::ReadAllText($env:BAT)
