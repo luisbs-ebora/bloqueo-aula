@@ -69,6 +69,9 @@ reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "24" /t REG_SZ /d
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "24" /t REG_SZ /d "kimi.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "25" /t REG_SZ /d "duck.ai" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "25" /t REG_SZ /d "duck.ai" /f >nul || set ERR=1
+rem Copilot de GitHub en la web (la parte de VS Code se corta en el archivo hosts, al final)
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v "26" /t REG_SZ /d "github.com/copilot" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /v "26" /t REG_SZ /d "github.com/copilot" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "1" /t REG_SZ /d "chatgpt.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "2" /t REG_SZ /d "chat.openai.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "3" /t REG_SZ /d "openai.com" /f >nul || set ERR=1
@@ -94,7 +97,10 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "22" /t REG_SZ /
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "23" /t REG_SZ /d "chat.qwen.ai" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "24" /t REG_SZ /d "kimi.com" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "25" /t REG_SZ /d "duck.ai" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v "26" /t REG_SZ /d "github.com/copilot" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "HubsSidebarEnabled" /t REG_DWORD /d 0 /f >nul || set ERR=1
+rem Copilot de Windows: la directiva antigua (por si la version de Windows aun la usa). La app se desinstala al final, en PowerShell.
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot" /v "TurnOffWindowsCopilot" /t REG_DWORD /d 1 /f >nul || set ERR=1
 echo Aplicando bloquear-ia-google ...
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 1 /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 1 /f >nul || set ERR=1
@@ -291,6 +297,7 @@ reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "47" /t 
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "48" /t REG_SZ /d "*://*.kimi.com/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "49" /t REG_SZ /d "*://duck.ai/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "50" /t REG_SZ /d "*://*.duck.ai/*" /f >nul || set ERR=1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "51" /t REG_SZ /d "*://github.com/copilot*" /f >nul || set ERR=1
 echo Aplicando bloquear-juegos-firefox ...
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "201" /t REG_SZ /d "*://poki.com/*" /f >nul || set ERR=1
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "202" /t REG_SZ /d "*://*.poki.com/*" /f >nul || set ERR=1
@@ -429,13 +436,23 @@ try {
   }
 } catch { Write-Host ('No se pudo poner al dia actualizar.ps1: ' + $_.Exception.Message) }
 try {
+  # App Copilot de Windows: se desinstala para todos los usuarios y se quita de la imagen para que no vuelva con los usuarios nuevos.
+  # No toca Microsoft 365 Copilot (Office) ni el resto de apps.
+  $pk = Get-AppxPackage -AllUsers -Name 'Microsoft.Copilot' -ErrorAction SilentlyContinue
+  foreach ($p in $pk) { Remove-AppxPackage -Package $p.PackageFullName -AllUsers -ErrorAction SilentlyContinue }
+  Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -eq 'Microsoft.Copilot' } | ForEach-Object { Remove-AppxProvisionedPackage -Online -PackageName $_.PackageName -ErrorAction SilentlyContinue | Out-Null }
+  if ($pk) { Write-Host 'App Copilot desinstalada' } else { Write-Host 'App Copilot: no estaba instalada' }
+} catch { Write-Host ('No se pudo quitar la app Copilot: ' + $_.Exception.Message) }
+try {
   # Las webs salen de la lista de Chrome de este mismo archivo: solo dominios, sin rutas (hosts no entiende rutas).
   $bat = [IO.File]::ReadAllText($env:BAT)
   $doms = [regex]::Matches($bat, 'Google\\Chrome\\URLBlocklist" /v "\d+" /t REG_SZ /d "([^"/?]+)"') | ForEach-Object { $_.Groups[1].Value.ToLower() }
   # Los dominios de Microsoft no van al hosts: Windows Defender lo marca como amenaza. Ya estan bloqueados en los navegadores.
   $doms = $doms | Where-Object { -not ($_.EndsWith('microsoft.com') -or $_.EndsWith('.microsoft')) }
   # Extras solo para hosts (subdominios que hosts no cubre por si solo)
-  $doms = @($doms) + @('auth.openai.com') | Sort-Object -Unique
+  # Copilot de GitHub (VS Code, Visual Studio...): sin estos no consigue su token ni contesta. api.github.com es de donde saca el permiso.
+  $copilot = @('api.github.com', 'api.githubcopilot.com', 'api.individual.githubcopilot.com', 'proxy.individual.githubcopilot.com', 'telemetry.individual.githubcopilot.com', 'copilot-proxy.githubusercontent.com', 'origin-tracker.githubusercontent.com')
+  $doms = @($doms) + @('auth.openai.com') + $copilot | Sort-Object -Unique
   $lineas = foreach ($d in $doms) { '0.0.0.0 ' + $d; if ($d.Split('.').Count -eq 2) { '0.0.0.0 www.' + $d } }
 
   $h = Join-Path $env:SystemRoot 'System32\drivers\etc\hosts'
