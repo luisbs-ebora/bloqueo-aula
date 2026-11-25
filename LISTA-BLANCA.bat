@@ -1,6 +1,7 @@
 @echo off
 rem FIRMA: BLOQUEO-AULA
-rem LISTA BLANCA (modo clase): bloquea TODA la web menos lo que hay en la lista de abajo.
+rem LISTA BLANCA (modo clase): bloquea TODA la web menos lo que hay en la lista de abajo: Google Classroom, Drive
+rem y sus herramientas, Canva, Kahoot y los laboratorios. Sin busquedas de Google ni de ningun otro buscador.
 rem Uso:  LISTA-BLANCA.bat on   = modo clase      LISTA-BLANCA.bat off  = modo libre (solo la lista negra)
 rem No hace falta ejecutarlo a mano: la tarea BloqueoAula lo aplica segun lo que diga MODO.txt en el repo.
 rem Las webs de la lista negra (IA, juegos...) siguen bloqueadas tambien en modo clase.
@@ -23,6 +24,9 @@ reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "999"
 
 if /i not "%MODO%"=="on" (
   echo Modo LIBRE en %COMPUTERNAME%: solo la lista negra.
+  for %%K in ("Google\Chrome" "Microsoft\Edge" "BraveSoftware\Brave") do (
+    reg add "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 1 /f >nul || set ERR=1
+  )
   goto fin
 )
 
@@ -33,55 +37,112 @@ for %%K in ("Google\Chrome" "Microsoft\Edge" "BraveSoftware\Brave") do (
 reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "999" /t REG_SZ /d "<all_urls>" /f >nul || set ERR=1
 
 rem ===== LISTA BLANCA de Edge, Chrome y Brave =====
-rem Un dominio permite tambien sus subdominios. Lo que este en la lista negra con mas detalle
-rem (gemini.google.com, google.com/search?udm=50...) sigue bloqueado.
+rem Un dominio permite tambien sus subdominios. Lo que no este aqui, no abre: ni la busqueda de Google,
+rem ni YouTube, ni Maps, ni el Traductor, ni Google Sites (de ahi salen muchos juegos "desbloqueados").
+rem Lo que este en la lista negra (gemini.google.com...) sigue bloqueado.
 rem Para permitir una web nueva: copia una linea, cambia el numero (que no se repita) y el dominio.
-call :permite 1 "google.com"
-call :permite 2 "google.es"
-call :permite 3 "gstatic.com"
-call :permite 4 "googleapis.com"
-call :permite 5 "googleusercontent.com"
-call :permite 6 "ggpht.com"
-call :permite 7 "accounts.youtube.com"
-call :permite 8 "luisbs-ebora.github.io"
-call :permite 9 "eboraformacion.es"
-call :permite 10 "cdn.jsdelivr.net"
-call :permite 11 "unpkg.com"
-call :permite 12 "cdnjs.cloudflare.com"
+rem Google: inicio de sesion y cuenta
+call :permite 1 "accounts.google.com"
+call :permite 2 "myaccount.google.com"
+call :permite 3 "accounts.youtube.com"
+rem Google: Classroom, Drive, Documentos/Hojas/Presentaciones/Formularios, Gmail, Calendar, Meet, Keep
+call :permite 4 "classroom.google.com"
+call :permite 5 "drive.google.com"
+call :permite 6 "docs.google.com"
+call :permite 7 "forms.gle"
+call :permite 8 "mail.google.com"
+call :permite 9 "calendar.google.com"
+call :permite 10 "meet.google.com"
+call :permite 11 "keep.google.com"
+call :permite 12 "contacts.google.com"
+call :permite 13 "script.google.com"
+rem Google: piezas que usan esas webs por dentro (menu de apps, imagenes, avisos)
+call :permite 14 "ogs.google.com"
+call :permite 15 "apis.google.com"
+call :permite 16 "clients1.google.com"
+call :permite 17 "clients2.google.com"
+call :permite 18 "clients4.google.com"
+call :permite 19 "clients5.google.com"
+call :permite 20 "clients6.google.com"
+call :permite 21 "lh3.google.com"
+call :permite 22 "play.google.com/log"
+call :permite 23 "www.google.com/url"
+call :permite 24 "www.google.com/recaptcha"
+call :permite 25 "gstatic.com"
+call :permite 26 "googleapis.com"
+call :permite 27 "googleusercontent.com"
+call :permite 28 "ggpht.com"
+rem Canva
+call :permite 29 "canva.com"
+call :permite 30 "canva-apps.com"
+call :permite 31 "canva.link"
+call :permite 32 "challenges.cloudflare.com"
+rem Kahoot
+call :permite 33 "kahoot.it"
+call :permite 34 "kahoot.com"
+call :permite 35 "onetrust.com"
+rem Laboratorios y talleres, web del centro y librerias que usan
+call :permite 36 "luisbs-ebora.github.io"
+call :permite 37 "eboraformacion.es"
+call :permite 38 "cdn.jsdelivr.net"
+call :permite 39 "unpkg.com"
+call :permite 40 "cdnjs.cloudflare.com"
+
+rem Sin buscador en la barra de direcciones: lo que se escriba ahi solo sirve como direccion.
+for %%K in ("Google\Chrome" "Microsoft\Edge" "BraveSoftware\Brave") do (
+  reg add "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 0 /f >nul || set ERR=1
+)
 
 rem ===== LISTA BLANCA de Firefox =====
-rem En Firefox las excepciones ganan a cualquier bloqueo, asi que aqui van solo los subdominios
-rem de Google que hacen falta (con *.google.com volverian Gemini y compania).
-call :ff 1 "*://google.com/*"
-call :ff 2 "*://www.google.com/*"
-call :ff 3 "*://www.google.es/*"
-call :ff 4 "*://accounts.google.com/*"
-call :ff 5 "*://myaccount.google.com/*"
-call :ff 6 "*://classroom.google.com/*"
-call :ff 7 "*://docs.google.com/*"
-call :ff 8 "*://drive.google.com/*"
-call :ff 9 "*://apis.google.com/*"
-call :ff 10 "*://ogs.google.com/*"
-call :ff 11 "*://play.google.com/*"
-call :ff 12 "*://script.google.com/*"
-call :ff 13 "*://lh3.google.com/*"
-call :ff 14 "*://clients1.google.com/*"
-call :ff 15 "*://clients2.google.com/*"
-call :ff 16 "*://clients4.google.com/*"
-call :ff 17 "*://clients5.google.com/*"
-call :ff 18 "*://clients6.google.com/*"
-call :ff 30 "*://*.clients6.google.com/*"
-call :ff 19 "*://*.gstatic.com/*"
-call :ff 20 "*://*.googleapis.com/*"
-call :ff 21 "*://*.googleusercontent.com/*"
-call :ff 22 "*://*.ggpht.com/*"
-call :ff 23 "*://accounts.youtube.com/*"
-call :ff 24 "*://luisbs-ebora.github.io/*"
-call :ff 25 "*://eboraformacion.es/*"
-call :ff 26 "*://*.eboraformacion.es/*"
-call :ff 27 "*://cdn.jsdelivr.net/*"
-call :ff 28 "*://unpkg.com/*"
-call :ff 29 "*://cdnjs.cloudflare.com/*"
+rem En Firefox las excepciones ganan a cualquier bloqueo, asi que de Google van solo los subdominios
+rem que hacen falta (con *.google.com volverian la busqueda, Gemini y compania).
+call :ff 1 "*://accounts.google.com/*"
+call :ff 2 "*://myaccount.google.com/*"
+call :ff 3 "*://accounts.youtube.com/*"
+call :ff 4 "*://classroom.google.com/*"
+call :ff 5 "*://drive.google.com/*"
+call :ff 6 "*://docs.google.com/*"
+call :ff 7 "*://forms.gle/*"
+call :ff 8 "*://mail.google.com/*"
+call :ff 9 "*://calendar.google.com/*"
+call :ff 10 "*://meet.google.com/*"
+call :ff 11 "*://keep.google.com/*"
+call :ff 12 "*://contacts.google.com/*"
+call :ff 13 "*://script.google.com/*"
+call :ff 14 "*://ogs.google.com/*"
+call :ff 15 "*://apis.google.com/*"
+call :ff 16 "*://clients1.google.com/*"
+call :ff 17 "*://clients2.google.com/*"
+call :ff 18 "*://clients4.google.com/*"
+call :ff 19 "*://clients5.google.com/*"
+call :ff 20 "*://clients6.google.com/*"
+call :ff 21 "*://*.clients6.google.com/*"
+call :ff 22 "*://lh3.google.com/*"
+call :ff 23 "*://play.google.com/log*"
+call :ff 24 "*://www.google.com/url*"
+call :ff 25 "*://www.google.com/recaptcha/*"
+call :ff 26 "*://*.gstatic.com/*"
+call :ff 27 "*://*.googleapis.com/*"
+call :ff 28 "*://*.googleusercontent.com/*"
+call :ff 29 "*://*.ggpht.com/*"
+call :ff 30 "*://canva.com/*"
+call :ff 31 "*://*.canva.com/*"
+call :ff 32 "*://*.canva-apps.com/*"
+call :ff 33 "*://canva.link/*"
+call :ff 34 "*://*.canva.link/*"
+call :ff 35 "*://challenges.cloudflare.com/*"
+call :ff 36 "*://kahoot.it/*"
+call :ff 37 "*://*.kahoot.it/*"
+call :ff 38 "*://kahoot.com/*"
+call :ff 39 "*://*.kahoot.com/*"
+call :ff 40 "*://*.onetrust.com/*"
+call :ff 41 "*://luisbs-ebora.github.io/*"
+call :ff 42 "*://eboraformacion.es/*"
+call :ff 43 "*://*.eboraformacion.es/*"
+call :ff 44 "*://cdn.jsdelivr.net/*"
+call :ff 45 "*://unpkg.com/*"
+call :ff 46 "*://cdnjs.cloudflare.com/*"
+
 
 :fin
 echo.
