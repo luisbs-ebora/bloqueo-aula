@@ -7,7 +7,7 @@ Hay **dos modos**, y el modo lo decide el archivo `MODO.txt` de este repo:
 | Modo | Qué se bloquea | Cuándo |
 |---|---|---|
 | `libre` | Solo la **lista negra**: IA, juegos, descarga de otros navegadores (`BLOQUEAR-TODO.bat`) | Fuera de clase |
-| `clase` | **Todo menos la lista blanca** (`LISTA-BLANCA.bat`): Google Classroom, Drive y sus herramientas (Documentos, Hojas, Presentaciones, Formularios, Gmail, Calendar, Meet, Keep), Canva, Kahoot, los laboratorios y talleres de luisbs-ebora.github.io y eboraformacion.es. **Sin búsquedas**: ni Google ni ningún otro buscador, y la barra de direcciones no busca. Tampoco YouTube, Maps, Traductor ni Google Sites. La lista negra sigue activa | Durante tus clases |
+| `clase` | **Todo menos la lista blanca** (`LISTA-BLANCA.bat`): Google Classroom, Drive y sus herramientas (Documentos, Hojas, Presentaciones, Formularios, Calendar, Meet, Keep), Canva, Kahoot, los laboratorios y talleres de luisbs-ebora.github.io y eboraformacion.es. **Sin búsquedas**: ni Google ni ningún otro buscador, y la barra de direcciones no busca. Tampoco Gmail, YouTube, Maps, Traductor ni Google Sites. La lista negra sigue activa | Durante tus clases |
 
 Cada equipo tiene una tarea programada, **BloqueoAula**, que se ejecuta como SYSTEM al encender y **cada 5 minutos**:
 descarga los tres archivos, y si algo ha cambiado (o cada 30 minutos, por si alguien ha tocado algo) aplica la lista negra

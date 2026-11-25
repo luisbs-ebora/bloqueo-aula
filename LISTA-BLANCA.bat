@@ -43,7 +43,7 @@ reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "999" /t
 
 rem ===== LISTA BLANCA de Edge, Chrome y Brave =====
 rem Un dominio permite tambien sus subdominios. Lo que no este aqui, no abre: ni la busqueda de Google,
-rem ni YouTube, ni Maps, ni el Traductor, ni Google Sites (de ahi salen muchos juegos "desbloqueados").
+rem ni Gmail, ni YouTube, ni Maps, ni el Traductor, ni Google Sites (de ahi salen muchos juegos "desbloqueados").
 rem Lo que este en la lista negra (gemini.google.com...) sigue bloqueado.
 rem Para permitir una web nueva: copia una linea, cambia el numero (que no se repita) y el dominio.
 rem Google: inicio de sesion y cuenta
@@ -51,12 +51,11 @@ call :permite 1 "accounts.google.com"
 call :permite 2 "myaccount.google.com"
 call :permite 3 "accounts.youtube.com"
 call :permite 45 "accounts.google.es"
-rem Google: Classroom, Drive, Documentos/Hojas/Presentaciones/Formularios, Gmail, Calendar, Meet, Keep
+rem Google: Classroom, Drive, Documentos/Hojas/Presentaciones/Formularios, Calendar, Meet, Keep (Gmail NO)
 call :permite 4 "classroom.google.com"
 call :permite 5 "drive.google.com"
 call :permite 6 "docs.google.com"
 call :permite 7 "forms.gle"
-call :permite 8 "mail.google.com"
 call :permite 9 "calendar.google.com"
 call :permite 10 "meet.google.com"
 call :permite 11 "keep.google.com"
@@ -116,7 +115,6 @@ call :ff 4 "*://classroom.google.com/*"
 call :ff 5 "*://drive.google.com/*"
 call :ff 6 "*://docs.google.com/*"
 call :ff 7 "*://forms.gle/*"
-call :ff 8 "*://mail.google.com/*"
 call :ff 9 "*://calendar.google.com/*"
 call :ff 10 "*://meet.google.com/*"
 call :ff 11 "*://keep.google.com/*"
