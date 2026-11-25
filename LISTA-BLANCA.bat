@@ -24,8 +24,13 @@ reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox\WebsiteFilter\Block" /v "999"
 
 if /i not "%MODO%"=="on" (
   echo Modo LIBRE en %COMPUTERNAME%: solo la lista negra.
+  rem El buscador vuelve: si la lista negra ya puso Google sin IA se reactiva, y si no se quita la directiva.
   for %%K in ("Google\Chrome" "Microsoft\Edge" "BraveSoftware\Brave") do (
-    reg add "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 1 /f >nul || set ERR=1
+    reg query "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderSearchURL" >nul 2>&1 && (
+      reg add "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderEnabled" /t REG_DWORD /d 1 /f >nul || set ERR=1
+    ) || (
+      reg delete "HKLM\SOFTWARE\Policies\%%~K" /v "DefaultSearchProviderEnabled" /f >nul 2>&1
+    )
   )
   goto fin
 )
