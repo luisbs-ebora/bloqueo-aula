@@ -92,6 +92,12 @@ call :permite 37 "eboraformacion.es"
 call :permite 38 "cdn.jsdelivr.net"
 call :permite 39 "unpkg.com"
 call :permite 40 "cdnjs.cloudflare.com"
+rem Simulador de protocolos que enlazan los laboratorios (solo esa web, no todo vercel.app)
+call :permite 41 "protocol-explorer-alpha.vercel.app"
+rem Archivos del propio equipo (las paginas HTML de los alumnos) y servidores locales (Live Server, XAMPP)
+call :permite 42 "file://*"
+call :permite 43 "localhost"
+call :permite 44 "127.0.0.1"
 
 rem Sin buscador en la barra de direcciones: lo que se escriba ahi solo sirve como direccion.
 for %%K in ("Google\Chrome" "Microsoft\Edge" "BraveSoftware\Brave") do (
@@ -147,6 +153,10 @@ call :ff 43 "*://*.eboraformacion.es/*"
 call :ff 44 "*://cdn.jsdelivr.net/*"
 call :ff 45 "*://unpkg.com/*"
 call :ff 46 "*://cdnjs.cloudflare.com/*"
+call :ff 47 "*://protocol-explorer-alpha.vercel.app/*"
+call :ff 48 "file:///*"
+call :ff 49 "*://localhost/*"
+call :ff 50 "*://127.0.0.1/*"
 
 
 :fin
