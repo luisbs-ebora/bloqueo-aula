@@ -50,6 +50,7 @@ rem Google: inicio de sesion y cuenta
 call :permite 1 "accounts.google.com"
 call :permite 2 "myaccount.google.com"
 call :permite 3 "accounts.youtube.com"
+call :permite 45 "accounts.google.es"
 rem Google: Classroom, Drive, Documentos/Hojas/Presentaciones/Formularios, Gmail, Calendar, Meet, Keep
 call :permite 4 "classroom.google.com"
 call :permite 5 "drive.google.com"
@@ -110,6 +111,7 @@ rem que hacen falta (con *.google.com volverian la busqueda, Gemini y compania).
 call :ff 1 "*://accounts.google.com/*"
 call :ff 2 "*://myaccount.google.com/*"
 call :ff 3 "*://accounts.youtube.com/*"
+call :ff 51 "*://accounts.google.es/*"
 call :ff 4 "*://classroom.google.com/*"
 call :ff 5 "*://drive.google.com/*"
 call :ff 6 "*://docs.google.com/*"
